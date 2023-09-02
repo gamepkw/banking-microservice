@@ -6,10 +6,11 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm/logger"
 
-	"atm5_microservices/logger"
+	// "atm5_microservices/logger"
 
-	accountModel "github.com/atm5_microservices/accounts_service/internal/models"
+	accountModel "github.com/gamepkw/accounts-banking-microservice/internal/models"
 
 	"github.com/gamepkw/transactions-banking-microservice/internal/middleware"
 
