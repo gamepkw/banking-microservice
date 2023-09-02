@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	accountModel "github.com/gamepkw/accounts-banking-microservice/models"
+	accountModel "github.com/gamepkw/accounts-banking-microservice/shared_model"
 )
 
 // type Account struct {
