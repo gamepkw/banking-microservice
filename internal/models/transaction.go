@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	accountModel "github.com/atm5_microservices/accounts_service/internal/models"
+	accountModel "github.com/gamepkw/accounts-banking-microservice/internal/models"
 )
 
 type Transaction struct {

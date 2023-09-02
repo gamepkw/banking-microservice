@@ -11,11 +11,11 @@ import (
 
 	accountModel "github.com/atm5_microservices/accounts_service/internal/models"
 
-	"github.com/atm5_microservices/transactions_service/internal/middleware"
+	"github.com/gamepkw/transactions-banking-microservice/internal/middleware"
 
-	model "github.com/atm5_microservices/transactions_service/internal/models"
+	model "github.com/gamepkw/transactions-banking-microservice/internal/models"
 
-	"github.com/atm5_microservices/transactions_service/internal/utils"
+	"github.com/gamepkw/transactions-banking-microservice/internal/utils"
 
 	"github.com/go-redis/redis"
 )

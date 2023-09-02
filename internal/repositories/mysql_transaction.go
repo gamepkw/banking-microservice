@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 
-	model "github.com/atm5_microservices/transactions_service/internal/models"
+	model "github.com/gamepkw/transactions-banking-microservice/internal/models"
 
 	"github.com/go-redis/redis"
 )

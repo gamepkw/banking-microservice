@@ -9,8 +9,8 @@ import (
 	producer "github.com/atm5_microservices/kafka/producer"
 
 	"github.com/IBM/sarama"
-	accountModel "github.com/atm5_microservices/accounts_service/internal/models"
-	model "github.com/atm5_microservices/transactions_service/internal/models"
+	accountModel "github.com/gamepkw/accounts-banking-microservice/internal/models"
+	model "github.com/gamepkw/transactions-banking-microservice/internal/models"
 
 	// accountModel "github.com/atm5_microservices/accounts_service/internal/models"
 
@@ -29,7 +29,7 @@ type transactionService struct {
 
 // NewTransactionService will create new an transactionService object representation of model.TransactionService interface
 func NewTransactionService(tr model.TransactionRepository,
-	au model.AccountService,
+	au accountModel.AccountService,
 	timeout time.Duration,
 	redis *redis.Client,
 	kafka sarama.Client) model.TransactionService {
