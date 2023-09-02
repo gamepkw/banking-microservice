@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 
-	producer "github.com/atm5_microservices/kafka/producer"
+	// producer "github.com/atm5_microservices/kafka/producer"
 
 	"github.com/IBM/sarama"
 	accountModel "github.com/gamepkw/accounts-banking-microservice/internal/models"
