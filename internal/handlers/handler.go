@@ -10,7 +10,7 @@ import (
 
 	// "atm5_microservices/logger"
 
-	accountModel "github.com/gamepkw/accounts-banking-microservice/internal/models"
+	accountModel "github.com/gamepkw/accounts-banking-microservice/shared_model"
 
 	"github.com/gamepkw/transactions-banking-microservice/internal/middleware"
 

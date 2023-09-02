@@ -9,7 +9,7 @@ import (
 	// producer "github.com/atm5_microservices/kafka/producer"
 
 	"github.com/IBM/sarama"
-	accountModel "github.com/gamepkw/accounts-banking-microservice/internal/models"
+	accountModel "github.com/gamepkw/accounts-banking-microservice/shared_model"
 	model "github.com/gamepkw/transactions-banking-microservice/internal/models"
 
 	// accountModel "github.com/atm5_microservices/accounts_service/internal/models"

@@ -4,7 +4,9 @@ go 1.19
 
 require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
+	github.com/gamepkw/accounts-banking-microservice v0.0.0-20230902062018-374909a5b85c // indirect
 	github.com/go-redis/redis v6.15.9+incompatible // indirect
+	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/labstack/echo/v4 v4.11.1 // indirect
 	github.com/labstack/gommon v0.4.0 // indirect
