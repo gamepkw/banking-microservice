@@ -1,10 +1,9 @@
 package model
 
 import (
-	"context"
 	"time"
 
-	accountModel "github.com/gamepkw/accounts-banking-microservice/shared_model"
+	accountModel "github.com/gamepkw/accounts-banking-microservice/models"
 )
 
 type Transaction struct {
@@ -32,24 +31,39 @@ type ScheduledTransaction struct {
 	UpdatedAt            time.Time            `json:"updated_at"`
 }
 
-type TransactionService interface {
-	// GetAllTransaction(ctx context.Context, cursor string, num int64) ([]Transaction, string, error)
-	// CreateTransaction(context.Context, *Transaction) error
-	Withdraw(context.Context, *Transaction) error
-	Deposit(context.Context, *Transaction) error
-	Transfer(context.Context, *Transaction) error
-	PollScheduledTransaction(ctx context.Context, time time.Time) (err error)
-	SaveScheduledTransaction(ctx context.Context, transaction *ScheduledTransaction) (err error)
-	ConsumeScheduledTransaction(ctx context.Context) (err error)
+type TransactionDetail struct {
+	Sender   string  `json:"sender"`
+	Receiver string  `json:"receiver"`
+	Amount   float64 `json:"amount" validate:"required,min=0.01"`
+	Fee      float64 `json:"fee"`
+	Total    float64 `json:"total"`
 }
 
-type TransactionRepository interface {
-	// GetAllTransaction(ctx context.Context, cursor string, num int64) (res []Transaction, nextCursor string, err error)
-	// GetTransactionByTID(ctx context.Context, tid int64) (Transaction, error)
-	CreateTransaction(ctx context.Context, tr *Transaction) error
-	SetTransferAmountPerDayInRedis(ctx context.Context, tr *Transaction) error
-	MigrateTransactionHistory(ctx context.Context) (err error)
-	CreateScheduledTransaction(ctx context.Context, st *ScheduledTransaction) (err error)
-	GetScheduledTransaction(ctx context.Context, time time.Time) (transaction []ScheduledTransaction, err error)
-	UpdateScheduledTransaction(ctx context.Context, tr ScheduledTransaction) (err error)
+type TransactionHistoryRequest struct {
+	AccountNo string                          `json:"account_no"`
+	Filter    TransactionHistoryRequestFilter `json:"filter"`
+}
+
+type TransactionHistoryRequestFilter struct {
+	Type  string `json:"type"`
+	Month string `json:"month"`
+	Year  string `json:"year"`
+}
+type TransactionHistoryResponse struct {
+	Type      string    `json:"type"`
+	Total     float64   `json:"total"`
+	Receiver  string    `json:"receiver,omitempty"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+type ResponseError struct {
+	Code    string `json:"code"`
+	Message string `json:"message"`
+}
+
+type TransactionRequest struct {
+	Amount   float64              `json:"amount"`
+	Type     string               `json:"type"`
+	Account  accountModel.Account `json:"account"`
+	Receiver accountModel.Account `json:"receiver,omitempty"`
 }
