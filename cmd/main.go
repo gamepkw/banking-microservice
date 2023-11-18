@@ -104,4 +104,6 @@ func main() {
 	// go transactionService.ConsumeScheduledTransaction(ctx)
 
 	log.Fatal(e.Start(viper.GetString("server.address")))
+
+	// test merge request
 }
