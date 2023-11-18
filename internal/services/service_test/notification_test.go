@@ -9,14 +9,11 @@ import (
 	"github.com/spf13/viper"
 )
 
-func (a *transactionService) migrateTransactionHistoryResponse(ctx context.Context) (err error) {
-	if err = a.transactionRepo.MigrateTransactionHistoryResponse(ctx); err != nil {
-		return err
-	}
+func (a *mockTransactionService) migrateTransactionHistoryResponse(ctx context.Context) (err error) {
 	return nil
 }
 
-func (a *transactionService) addTransactionNotiToQueue(ctx context.Context, tr model.Transaction, remainingBalance float64) {
+func (a *mockTransactionService) addTransactionNotiToQueue(ctx context.Context, tr model.Transaction, remainingBalance float64) {
 	topic := "sms_transaction"
 	brokerAddress := viper.GetString("kafka.broker_address")
 	if tr.Type == "withdraw" {

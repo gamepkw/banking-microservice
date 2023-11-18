@@ -9,20 +9,20 @@ import (
 	"net/http"
 
 	accountModel "github.com/gamepkw/accounts-banking-microservice/models"
-	model "github.com/gamepkw/transactions-banking-microservice/internal/models"
+	"github.com/pkg/errors"
 )
 
 func (a *transactionService) restGetAccountByAccountNo(ctx context.Context, accountNo string) (*accountModel.Account, error) {
 	httpClient := &http.Client{}
-	getAccountUrl := fmt.Sprintf("http://localhost:8070/users/accounts/%s", accountNo)
+	getAccountUrl := fmt.Sprintf("http://localhost:8070/accounts/%s", accountNo)
 	req, err := http.NewRequest("GET", getAccountUrl, nil)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "error make http request")
 	}
 
 	resp, err := httpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "error get http response")
 	}
 	defer resp.Body.Close()
 
@@ -32,12 +32,12 @@ func (a *transactionService) restGetAccountByAccountNo(ctx context.Context, acco
 
 	responseBody, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "error read response body")
 	}
 
 	var account accountModel.Account
 	if err := json.Unmarshal(responseBody, &account); err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "error unmarshal response body")
 	}
 
 	return &account, nil
@@ -45,23 +45,23 @@ func (a *transactionService) restGetAccountByAccountNo(ctx context.Context, acco
 
 func (a *transactionService) restUpdateAccount(ctx context.Context, account accountModel.Account) error {
 	httpClient := &http.Client{}
-	updateAccountURL := fmt.Sprintf("http://localhost:8070/users/accounts/%s", account.AccountNo) // Fix the URL with "http://"
+	updateAccountURL := "http://localhost:8070/accounts/update"
 
 	requestBody, err := json.Marshal(account)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "error marshal request body")
 	}
 
 	req, err := http.NewRequest("PUT", updateAccountURL, bytes.NewBuffer(requestBody))
 	if err != nil {
-		return err
+		return errors.Wrap(err, "error make http request")
 	}
 
 	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := httpClient.Do(req)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "error get http response")
 	}
 	defer resp.Body.Close()
 
@@ -72,7 +72,7 @@ func (a *transactionService) restUpdateAccount(ctx context.Context, account acco
 	var responseBodyBytes []byte
 	responseBodyBytes, err = io.ReadAll(resp.Body)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "error read response body")
 	}
 
 	if len(responseBodyBytes) == 0 {
@@ -80,71 +80,44 @@ func (a *transactionService) restUpdateAccount(ctx context.Context, account acco
 	}
 
 	if err := json.Unmarshal(responseBodyBytes, &account); err != nil {
-		return err
+		return errors.Wrap(err, "error unmarshal response body")
 	}
 
 	return nil
 }
 
-func (a *transactionService) restCheckTransactionLimit(ctx context.Context, req model.TransactionRequest) (bool, error) {
+func (a *transactionService) restGetDailyRemainingAmount(ctx context.Context, accountNo string) (float64, error) {
 	httpClient := &http.Client{}
-	getDailyLimitUrl := fmt.Sprintf("http://localhost:8070/accounts-limit/%s", req.Account.AccountNo)
 
-	httpRequest, err := http.NewRequest("GET", getDailyLimitUrl, nil)
+	getDailyRemainingAmountUrl := fmt.Sprintf("http://localhost:8070/accounts/get-daily-remaining-amount/%s", accountNo)
+
+	httpRequest, err := http.NewRequest("GET", getDailyRemainingAmountUrl, nil)
+
 	if err != nil {
-		return false, err
+		return 0, err
 	}
+	// bearerToken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWwiOiIyY2FkYTNlOTE3NGE1ZmRkOGNmMjZlODJlZDE4MjlhM2Y5ZWUxNWQ4ZjJmZTNkMjFlZTI5ZDEyYjYxOTk3YWY5IiwiZXhwIjoxNjk5Mjg5NjQyfQ.-n2iF1RZOwRHv2lEBDsWL7lop3Z__9MHfj7vsQ0g9s4"
+	// httpRequest.Header.Set("Authorization", "Bearer "+bearerToken)
 
 	resp, err := httpClient.Do(httpRequest)
 	if err != nil {
-		return false, err
+		return 0, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return false, fmt.Errorf("failed to retrieve account details, status code: %d", resp.StatusCode)
+		return 0, fmt.Errorf("failed to retrieve account details, status code: %d", resp.StatusCode)
 	}
 
 	responseBody, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return false, err
+		return 0, err
 	}
 
-	var dailyLimit float64
-	if err := json.Unmarshal(responseBody, &dailyLimit); err != nil {
-		return false, err
+	var dailyRemainingAmount float64
+	if err := json.Unmarshal(responseBody, &dailyRemainingAmount); err != nil {
+		return 0, err
 	}
 
-	getDailySumTransactionUrl := fmt.Sprintf("http://localhost:8070/accounts-daily-limit/%s", req.Account.AccountNo)
-
-	httpRequest, err = http.NewRequest("GET", getDailySumTransactionUrl, nil)
-	if err != nil {
-		return false, err
-	}
-
-	resp, err = httpClient.Do(httpRequest)
-	if err != nil {
-		return false, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return false, fmt.Errorf("failed to retrieve account details, status code: %d", resp.StatusCode)
-	}
-
-	responseBody, err = io.ReadAll(resp.Body)
-	if err != nil {
-		return false, err
-	}
-
-	var dailySumTransaction float64
-	if err := json.Unmarshal(responseBody, &dailySumTransaction); err != nil {
-		return false, err
-	}
-
-	if req.Amount+dailySumTransaction > dailyLimit {
-		return false, nil
-	}
-
-	return true, nil
+	return dailyRemainingAmount, nil
 }

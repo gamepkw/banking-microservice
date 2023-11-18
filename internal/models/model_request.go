@@ -49,12 +49,6 @@ type TransactionHistoryRequestFilter struct {
 	Month string `json:"month"`
 	Year  string `json:"year"`
 }
-type TransactionHistoryResponse struct {
-	Type      string    `json:"type"`
-	Total     float64   `json:"total"`
-	Receiver  string    `json:"receiver,omitempty"`
-	CreatedAt time.Time `json:"created_at"`
-}
 
 type ResponseError struct {
 	Code    string `json:"code"`

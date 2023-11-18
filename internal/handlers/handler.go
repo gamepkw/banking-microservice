@@ -2,14 +2,11 @@ package handler
 
 import (
 	"github.com/gamepkw/transactions-banking-microservice/internal/middleware"
-	"github.com/labstack/echo/v4"
-
 	model "github.com/gamepkw/transactions-banking-microservice/internal/models"
 	transactionService "github.com/gamepkw/transactions-banking-microservice/internal/services"
-
-	"github.com/go-redis/redis"
-
 	validator "github.com/go-playground/validator/v10"
+	"github.com/go-redis/redis"
+	"github.com/labstack/echo/v4"
 )
 
 type TransactionHandler struct {
@@ -42,8 +39,6 @@ func NewTransactionHandler(e *echo.Echo, us transactionService.TransactionServic
 	middL := middleware.InitMiddleware()
 
 	transactionapiGroup := e.Group("/transaction", middL.RateLimitMiddlewareForTransaction)
-
-	// e.GET("/transactions", handler.GetAllTransaction)
 	transactionapiGroup.POST("/deposit", handler.Deposit)
 	transactionapiGroup.POST("/withdraw", handler.Withdraw)
 	transactionapiGroup.POST("/transfer", handler.Transfer)

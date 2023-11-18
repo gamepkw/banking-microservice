@@ -12,6 +12,7 @@ import (
 )
 
 func (a *TransactionHandler) Deposit(c echo.Context) (err error) {
+
 	time.Sleep(2 * time.Second)
 	var transaction model.Transaction
 	transaction.SubmittedAt = time.Now()

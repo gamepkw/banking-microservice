@@ -5,6 +5,7 @@ import (
 	"time"
 
 	model "github.com/gamepkw/transactions-banking-microservice/internal/models"
+	"github.com/pkg/errors"
 )
 
 func (m *transactionRepository) UpdateScheduledTransaction(ctx context.Context, tr model.ScheduledTransaction) (err error) {
@@ -19,7 +20,7 @@ func (m *transactionRepository) UpdateScheduledTransaction(ctx context.Context, 
 
 	_, err = stmt.ExecContext(ctx, tr.Status, tr.UpdatedAt, tr.Id)
 	if err != nil {
-		return
+		return errors.Wrap(err, "can not update scheduled transaction: ")
 	}
 	return
 }

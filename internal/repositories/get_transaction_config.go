@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 
+	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 )
 
@@ -13,7 +14,7 @@ func (m *transactionRepository) GetTransactionConfig(ctx context.Context, config
 	rows, err := m.conn.QueryContext(ctx, query, configName)
 	if err != nil {
 		logrus.Error(err)
-		return "", err
+		return "", errors.Wrap(err, "can not get config from db: ")
 	}
 
 	var configValue string

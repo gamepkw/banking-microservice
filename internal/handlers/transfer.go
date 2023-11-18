@@ -41,6 +41,7 @@ func (a *TransactionHandler) Transfer(c echo.Context) error {
 		// logger.Error(fmt.Sprintf("%s %s \n %s", transferRequest, err.Error(), requestBody), c.Request())
 		return c.JSON(getStatusCode(err), model.ResponseError{Message: err.Error()})
 	}
+
 	// logger.Info(fmt.Sprintf("%s: stop...", transferRequest), c.Request())
 	return c.JSON(http.StatusCreated, TransactionResponse{Message: "Transfer successfully", Body: &transaction})
 }

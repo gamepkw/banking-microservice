@@ -21,7 +21,6 @@ func (a *TransactionHandler) Withdraw(c echo.Context) (err error) {
 	if transaction.Type != "withdraw" {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid request")
 	}
-	// ctx := c.Request().Context()
 
 	transaction.SubmittedAt = time.Now()
 

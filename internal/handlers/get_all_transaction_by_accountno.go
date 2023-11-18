@@ -25,5 +25,5 @@ func (a *TransactionHandler) GetAllTransactionByAccountNo(c echo.Context) error 
 		// logger.Error(fmt.Sprintf("%s %s \n %s", transferRequest, err.Error(), requestBody), c.Request())
 		return c.JSON(getStatusCode(err), model.ResponseError{Message: err.Error()})
 	}
-	return c.JSON(http.StatusOK, TransactionHistoryResponseResponse{Message: "Get transaction detail success", Body: res})
+	return c.JSON(http.StatusOK, TransactionHistoryResponseResponse{Message: "Get all transaction history success", Body: res})
 }

@@ -101,6 +101,7 @@ func main() {
 	transactionRepo := _transactionRepostitory.NewTransactionRepository(dbConn, redis)
 	transactionService := _transactionService.NewTransactionService(transactionRepo, timeoutContext, redis)
 	_transactionHandler.NewTransactionHandler(e, transactionService, redis)
+	// go transactionService.ConsumeScheduledTransaction(ctx)
 
 	log.Fatal(e.Start(viper.GetString("server.address")))
 }

@@ -8,7 +8,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (a *transactionService) Withdraw(c context.Context, tr *model.Transaction) (err error) {
+func (a *mockTransactionService) Withdraw(c context.Context, tr *model.Transaction) (err error) {
 	ctx, cancel := context.WithTimeout(c, a.contextTimeout)
 	defer cancel()
 

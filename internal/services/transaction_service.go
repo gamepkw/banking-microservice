@@ -4,34 +4,27 @@ import (
 	"context"
 	"time"
 
-	// producer "github.com/atm5_microservices/kafka/producer"
-
-	// "github.com/IBM/sarama"
-
 	model "github.com/gamepkw/transactions-banking-microservice/internal/models"
-	transactionRepo "github.com/gamepkw/transactions-banking-microservice/internal/repositories"
+	repo "github.com/gamepkw/transactions-banking-microservice/internal/repositories"
 
 	"github.com/go-redis/redis"
 )
 
 type transactionService struct {
-	transactionRepo transactionRepo.TransactionRepository
+	transactionRepo repo.TransactionRepository
 	contextTimeout  time.Duration
 	redis           *redis.Client
-	// kafkaClient     sarama.Client
 }
 
 func NewTransactionService(
-	tr transactionRepo.TransactionRepository,
+	tr repo.TransactionRepository,
 	timeout time.Duration,
 	redis *redis.Client,
-	// kafka sarama.Client
 ) TransactionService {
 	return &transactionService{
 		transactionRepo: tr,
 		contextTimeout:  timeout,
 		redis:           redis,
-		// kafkaClient:     kafka,
 	}
 }
 

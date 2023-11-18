@@ -10,8 +10,6 @@ import (
 
 func (m *transactionRepository) GetAllTransactionByAccountNo(ctx context.Context, request model.TransactionHistoryRequest) ([]model.TransactionHistoryResponse, error) {
 
-	fmt.Println(request)
-
 	query := `
 			SELECT type, total_amount, receiver, created_at FROM banking.transactions WHERE account = ? 
 	`
@@ -30,8 +28,6 @@ func (m *transactionRepository) GetAllTransactionByAccountNo(ctx context.Context
 	}
 
 	query += "ORDER BY created_at DESC"
-
-	fmt.Println(query)
 
 	rows, err := m.conn.Query(query, request.AccountNo)
 	if err != nil {

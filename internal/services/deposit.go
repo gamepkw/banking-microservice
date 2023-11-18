@@ -7,6 +7,7 @@ import (
 
 	model "github.com/gamepkw/transactions-banking-microservice/internal/models"
 	"github.com/go-redis/redis"
+	"github.com/pkg/errors"
 )
 
 func (a *transactionService) Deposit(c context.Context, tr *model.Transaction) (err error) {
@@ -15,7 +16,7 @@ func (a *transactionService) Deposit(c context.Context, tr *model.Transaction) (
 
 	acc, err := a.restGetAccountByAccountNo(ctx, tr.Account.AccountNo)
 	if err != nil {
-		return err
+		return errors.Wrap(err, fmt.Sprintf("error get account data: %s", tr.Account.AccountNo))
 	}
 
 	var limitAmount string
@@ -41,16 +42,16 @@ func (a *transactionService) Deposit(c context.Context, tr *model.Transaction) (
 	acc.Balance += tr.Total
 
 	if err = a.restUpdateAccount(ctx, *acc); err != nil {
-		return err
+		return errors.Wrap(err, fmt.Sprintf("error update account: %s", acc.AccountNo))
 	}
 
 	if err = a.createTransaction(ctx, tr); err != nil {
-		return err
+		return errors.Wrap(err, fmt.Sprintf("error create transaction"))
 	}
 
 	tr.Account = *acc
 
-	// go a.addTransactionNotiToQueue(ctx, *tr, acc.Balance)
+	go a.addTransactionNotiToQueue(ctx, *tr, acc.Balance)
 
 	return nil
 

@@ -15,7 +15,7 @@ type transactionRepository struct {
 	redis *redis.Client
 }
 
-func NewtransactionRepository(conn *sql.DB, redis *redis.Client) TransactionRepository {
+func NewTransactionRepository(conn *sql.DB, redis *redis.Client) TransactionRepository {
 	return &transactionRepository{
 		conn:  conn,
 		redis: redis,
